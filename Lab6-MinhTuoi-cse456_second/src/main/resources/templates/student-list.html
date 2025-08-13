@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student List</title>
+</head>
+<body>
+<script th:inline="javascript" th:if="${pid} != null">
+    window.addEventListener('load', function (){alert([[${pmsg}]])})
+</script>
+    <h1 th:text="'Student List:'"></h1>
+    <div th:if="${pid}!=null">
+        <p></p>
+        <p th:text="'ID: ' + ${pid}"></p>
+        <p th:text="'Name: ' + ${pname}"></p>
+        <p th:text="'YOB: ' + ${pyob}"></p>
+        <p th:text="'GPA: ' + ${pgpa}"></p>
+    </div>
+    <table>
+        <thead>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Year Of Birth</th>
+        <th>GPA</th>
+        <th>Action</th>
+        </thead>
+        <tbody>
+<!--        with each st, that is a student-->
+        <tr th:each="st : ${students}">
+            <td th:text="${st.id}"></td>
+            <td th:text="${st.name}"></td>
+            <td th:text="${st.yob}"></td>
+            <td th:text="${st.gpa}"></td>
+            <td>
+                <a th:href="@{'/students/edit/' + ${st.id}}">Edit</a>
+                <a th:href="@{'/students/delete/' +  ${st.id}}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
