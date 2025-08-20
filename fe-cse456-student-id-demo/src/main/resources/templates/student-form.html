@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student</title>
+</head>
+<body>
+    <h1 th:if="${formMode == 'edit'}">Edit A Student Info</h1>
+    <h1 th:if="${formMode == 'add'}">Add A Student Info</h1>
+    <h1>Student Form</h1>
+    <form action="/student/form" th:object="${student}" method="post">
+        <p>
+            <label for="id">ID</label>
+<!--            <input type="text" name="id" id="id" value="${student.id}"></input>-->
+            <input type="text" id="id" th:field="*{id}" th:readonly="${formMode == 'edit'}" th:style="${formMode == 'edit'?'color : red' : 'color : black'}"/>
+            <span th:errors="*{id}" style="color: red"></span>
+            <span th:if="{duplicatedId != null}" th:text="${duplicateId}" style="color: red">*</span>
+        </p>
+        <p>
+            <label for="name">Name</label>
+            <input type="text" id="name" th:field="*{name}" />
+            <span th:errors="*{name}" style="color: red"></span>
+        </p>
+        <p>
+            <label for="yob">YOB</label>
+            <input type="text" id="yob" th:field="*{yob}" />
+            <span th:errors="*{yob}" style="color: red"></span>
+        </p>
+        <p>
+            <label for="gpa">GPA</label>
+            <input type="text" id="gpa" th:field="*{gpa}" />
+            <span th:errors="*{gpa}" style="color: red"></span>
+        </p>
+        <p>
+            <label for="major">Major</label>
+            <select id="major" th:field="*{major.id}" >
+                <option th:each="m : ${majorList}" th:value="${m.id}" th:text="${m.name}" th:selected="${m.id == student.major.id}">CSE</option>
+            </select>
+        </p>
+        <button type="submit">Submit</button>
+        <input type="text" name="formMode" th:value="${formMode}">
+    </form>
+</body>
+</html>

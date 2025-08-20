@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="welcome">
+        <span>Welcome, <span class="username" th:text="${session.user.username}">username</span></span>
+        <a th:href="@{/logout}">Logout</a>
+    </div>
+    <h1>Student List</h1>
+    <form th:action="@{/students}" th:object="${student}" method="get">
+        <input placeholder="Search By Name" type="text" name="keyword">
+        <button type="submit">Search</button>
+    </form>
+<!--    notify errors when not in the correct role -->
+    <span th:if="${errRole != null}"></span>
+    <a th:href="@{'/student/add'}" th:if="${session.user.role != 3}">Add Student</a>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Year of Birth</th>
+            <th>GPA</th>
+            <th>Major</th>
+            <th th:if="${session.user.role != 3}">Action</th>
+            <th>Created Date</th>
+            <th>Last Modified</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s : ${studentList}">
+            <td th:text="${s.id}"></td>
+            <td th:text="${s.name}"></td>
+            <td th:text="${s.yob}"></td>
+            <td th:text="${s.gpa}"></td>
+            <td th:text="${s.major.name}"></td>
+            <td th:if="${session.user.role != 3}">
+                <a th:href="@{'/student/edit/' + ${s.id}}" th:if="${session.user.role != 3}">Edit</a>
+                <a th:href="@{'/student/delete/' + ${s.id}}" onclick="confirm('Are u sure?')" th:if="${session.user.role == 1}">Delete</a>
+            </td>
+            <td th:text="${#temporals.format(s.createdDate,'dd/MM/yyyy HH:mm:ss')}"></td>
+            <td th:text="${#temporals.format(s.lastModifiedDate,'dd/MM/yyyy HH:mm:ss')}"></td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
